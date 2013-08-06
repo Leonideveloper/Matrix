@@ -1,7 +1,6 @@
 package com.gmail.leonidandand.matrix;
 
 public class Dimension {
-
 	public final int rows;
 	public final int columns;
 

@@ -40,4 +40,8 @@ public class TestDimension {
 		assertFalse(new Dimension(1, 2).equals(new Dimension(3, 1)));
 		assertFalse(new Dimension(2, 4).equals(null));
 	}
+
+	public void testHashCode_NotThrowsExceptions() {
+		new Dimension(2, 3).hashCode();
+	}
 }

@@ -43,4 +43,9 @@ public class TestPosition {
 		assertFalse(new Position(1, 2).equals(new Position(0, 0)));
 		assertFalse(new Position(1, 2).equals(null));
 	}
+
+	@Test
+	public void testHashCode_NotThrowsExceptions() {
+		new Position(1, 2).hashCode();
+	}	
 }
