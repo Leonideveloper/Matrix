@@ -36,16 +36,35 @@ public class TestPosition {
 	public void testIllegalColumns() {
 		new Position(1, -2);
 	}
+	
+	@Test
+	public void testEqualsIdentityTrue() {
+	    Position position = new Position(1, 2);
+	    assertTrue(position.equals(position));
+	}
 
 	@Test
-	public void testEquals() {
-		assertTrue(new Position(1, 2).equals(new Position(1, 2)));
-		assertFalse(new Position(1, 2).equals(new Position(0, 0)));
-		assertFalse(new Position(1, 2).equals(null));
+	public void testValueEqualsTrue() {
+	    assertTrue(new Position(1, 2).equals(new Position(1, 2)));
+	}
+
+	@Test
+	public void testValueEqualsFalseIfColumnDiffers() {
+	    assertFalse(new Position(1, 2).equals(new Position(1, 3)));
+	}
+
+	@Test
+	public void testValueEqualsFalseIfRowDiffers() {
+	    assertFalse(new Position(1, 2).equals(new Position(3, 2)));
+	}
+	
+	@Test
+	public void testEqualsFalseForNull() {
+	    assertFalse(new Position(1, 2).equals(null));
 	}
 
 	@Test
 	public void testHashCode_NotThrowsExceptions() {
 		new Position(1, 2).hashCode();
-	}	
+	}
 }

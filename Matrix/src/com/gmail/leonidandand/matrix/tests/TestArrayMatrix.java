@@ -10,60 +10,61 @@ import org.junit.Test;
 
 import com.gmail.leonidandand.matrix.Dimension;
 import com.gmail.leonidandand.matrix.Matrix;
-import com.gmail.leonidandand.matrix.MatrixNotThreadSafe;
+import com.gmail.leonidandand.matrix.ArrayMatrix;
 import com.gmail.leonidandand.matrix.OnEachHandler;
 import com.gmail.leonidandand.matrix.Position;
 
-public class TestMatrixNotThreadSafe {
+public class TestArrayMatrix {
 	private static final Integer VALUE = 5;
-	private static final int ROWS = 10;
-	private static final int COLUMNS = 20;
+	private static final Dimension DIM = new Dimension(10, 18);
 	
 	private Matrix<Integer> matrix;
 
 	@Before
 	public void setUp() {
-		this.matrix = new MatrixNotThreadSafe<Integer>(ROWS, COLUMNS);
+		this.matrix = new ArrayMatrix<Integer>(DIM);
 	}
 	
 	@Test
 	public void testMatrixCopyConstructor() {
 		fillMatrix(matrix);
-		Matrix<Integer> copy = new MatrixNotThreadSafe<Integer>(matrix);
-		assertEquals(matrix.rows(), copy.rows());
-		assertEquals(matrix.columns(), copy.columns());
-		for (int row = 0; row < copy.rows(); ++row) {
-			for (int column = 0; column < copy.columns(); ++column) {
-				assertEquals(matrix.get(row, column), copy.get(row, column));
+		Matrix<Integer> copy = new ArrayMatrix<Integer>(matrix);
+		assertEquals(matrix.getDimension(), copy.getDimension());
+		for (int row = 0; row < DIM.rows; ++row) {
+			for (int column = 0; column < DIM.columns; ++column) {
+				Position pos = new Position(row, column);
+				assertEquals(matrix.get(pos), copy.get(pos));
 			}
 		}
 	}
 	
 	private void fillMatrix(final Matrix<Integer> matrixToFill) {
-		for (int row = 0; row < matrixToFill.rows(); ++row) {
-			for (int column = 0; column < matrixToFill.columns(); ++column) {
-				matrixToFill.set(row, column, elementForPosition(row, column));
+		final Dimension dim = matrixToFill.getDimension();
+		for (int row = 0; row < dim.rows; ++row) {
+			for (int column = 0; column < dim.columns; ++column) {
+				Position pos = new Position(row, column);
+				matrixToFill.set(pos, elementForPosition(pos));
 			}
 		}
 	}
 	
-	private Integer elementForPosition(int row, int column) {
-		return row * column;
+	private Integer elementForPosition(Position pos) {
+		return pos.row * pos.column;
 	}
 
 	@Test
 	public void testInitValueIsNull() {
-		assertNull(matrix.get(0, 0));
+		assertNull(matrix.get(new Position(0, 0)));
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testConstructorNegativeDimension() {
-		new MatrixNotThreadSafe<Integer>(1, -1);
+		new ArrayMatrix<Integer>(1, -1);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testConstructorDimensionIsZero() {
-		new MatrixNotThreadSafe<Integer>(0, 1);
+		new ArrayMatrix<Integer>(0, 1);
 	}
 
 	@Test
@@ -82,41 +83,27 @@ public class TestMatrixNotThreadSafe {
 
 	@Test
 	public void testGetDimension() {
-		assertEquals(new Dimension(ROWS, COLUMNS), matrix.getDimension());
-	}
-
-	@Test
-	public void testDimensionOfMatrix() {
-		assertEquals(ROWS, matrix.rows());
-		assertEquals(COLUMNS, matrix.columns());
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void testGetByNegativePosition() {
-		matrix.get(1, -1);
+		Matrix<Integer> matrix = new ArrayMatrix<Integer>(DIM);
+		assertEquals(DIM, matrix.getDimension());
 	}
 
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void testGetByOutOfBoundsPosition() {
-		matrix.get(ROWS + 1, 0);
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void testSetByNegativePosition() {
-		matrix.set(-1, 0, VALUE);
+		matrix.get(new Position(DIM.rows + 1, 0));
 	}
 
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void testSetByOutOfBoundsPosition() {
-		matrix.set(0, COLUMNS + 1, VALUE);
+		matrix.set(new Position(0, DIM.columns + 1), VALUE);
 	}
 
 	@Test
 	public void testGetSet() {
 		fillMatrix(matrix);
-		for (int row = 0; row < ROWS; ++row) {
-			for (int column = 0; column < COLUMNS; ++column) {
-				assertEquals(elementForPosition(row, column), matrix.get(row, column));
+		for (int row = 0; row < DIM.rows; ++row) {
+			for (int column = 0; column < DIM.columns; ++column) {
+				Position pos = new Position(row, column);
+				assertEquals(elementForPosition(pos), matrix.get(pos));
 			}
 		}
 	}
@@ -125,9 +112,10 @@ public class TestMatrixNotThreadSafe {
 	public void testFill() {
 		final Integer one = 1;
 		matrix.fill(one);
-		for (int row = 0; row < ROWS; ++row) {
-			for (int column = 0; column < COLUMNS; ++column) {
-				assertTrue(one.equals(matrix.get(row, column)));
+		for (int row = 0; row < DIM.rows; ++row) {
+			for (int column = 0; column < DIM.columns; ++column) {
+				Integer elem = matrix.get(new Position(row, column));
+				assertTrue(one.equals(elem));
 			}
 		}
 	}
@@ -135,16 +123,16 @@ public class TestMatrixNotThreadSafe {
 	@Test
 	public void testFillByNullValues() {
 		matrix.fill(null);
-		for (int row = 0; row < ROWS; ++row) {
-			for (int column = 0; column < COLUMNS; ++column) {
-				assertNull(matrix.get(row, column));
+		for (int row = 0; row < DIM.rows; ++row) {
+			for (int column = 0; column < DIM.columns; ++column) {
+				assertNull(matrix.get(new Position(row, column)));
 			}
 		}
 	}
 	
 	@Test
 	public void testSwap() {
-		Matrix<Integer> matrix = new MatrixNotThreadSafe<Integer>(2, 2);
+		Matrix<Integer> matrix = new ArrayMatrix<Integer>(2, 2);
 		Position pos1 = new Position(0, 0);
 		Position pos2 = new Position(1, 1);
 		Integer val1 = 1;
@@ -156,23 +144,16 @@ public class TestMatrixNotThreadSafe {
 		assertEquals(val1, matrix.get(pos1));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
-	public void testSwapIllegalArguments() {
-		Position pos1 = new Position(0, 0);
-		Position pos2 = new Position(0, -1);
-		matrix.swap(pos1, pos2);
-	}
-
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void testSwapPositionOutOfBounds() {
-		Position pos1 = new Position(0, COLUMNS + 1);
+		Position pos1 = new Position(0, DIM.columns + 1);
 		Position pos2 = new Position(0, 0);
 		matrix.swap(pos1, pos2);
 	}
 
 	@Test
 	public void testForEach_AllElementsAreProcessedExactlyOnce() {
-		final Matrix<Boolean> flags = getMatrixInitializedByFalse(ROWS, COLUMNS);
+		final Matrix<Boolean> flags = getMatrixInitializedByFalse(DIM);
 		flags.forEach(new OnEachHandler<Boolean>() {
 			@Override
 			public void handle(Position pos, Boolean elem) {
@@ -181,18 +162,18 @@ public class TestMatrixNotThreadSafe {
 				flags.set(pos, true);
 			}
 		});
-		for (int row = 0; row < flags.rows(); ++row) {
-			for (int column = 0; column < flags.columns(); ++column) {
-				assertTrue(flags.get(row, column));
+		for (int row = 0; row < DIM.rows; ++row) {
+			for (int column = 0; column < DIM.columns; ++column) {
+				assertTrue(flags.get(new Position(row, column)));
 			}
 		}
 	}
 	
-	private Matrix<Boolean> getMatrixInitializedByFalse(int rows, int columns) {
-		final Matrix<Boolean> flags = new MatrixNotThreadSafe<Boolean>(rows, columns);
-		for (int row = 0; row < flags.rows(); ++row) {
-			for (int column = 0; column < flags.columns(); ++column) {
-				flags.set(row, column, false);
+	private Matrix<Boolean> getMatrixInitializedByFalse(Dimension dim) {
+		final Matrix<Boolean> flags = new ArrayMatrix<Boolean>(dim);
+		for (int row = 0; row < dim.rows; ++row) {
+			for (int column = 0; column < dim.columns; ++column) {
+				flags.set(new Position(row, column), false);
 			}
 		}
 		return flags;
@@ -200,7 +181,7 @@ public class TestMatrixNotThreadSafe {
 
 	@Test
 	public void testForEach_Order_LeftToRight_UpToDown() {
-		final Matrix<Boolean> flags = getMatrixInitializedByFalse(ROWS, COLUMNS);
+		final Matrix<Boolean> flags = getMatrixInitializedByFalse(DIM);
 		flags.forEach(new OnEachHandler<Boolean>() {
 			@Override
 			public void handle(Position pos, Boolean elem) {
@@ -213,7 +194,7 @@ public class TestMatrixNotThreadSafe {
 	}
 
 	private void assertPreviousElementWasProcessed(Matrix<Boolean> matrix, Position pos) {
-		Position positionBefore = positionBefore(matrix.rows(), matrix.columns(), pos);
+		Position positionBefore = positionBefore(matrix.getDimension().rows, matrix.getDimension().columns, pos);
 		assertTrue(matrix.get(positionBefore));
 	}
 
@@ -227,14 +208,14 @@ public class TestMatrixNotThreadSafe {
 
 	@Test
 	public void testEquals() {
-		Matrix<Integer> matrix1 = new MatrixNotThreadSafe<Integer>(1, 2);
-		matrix1.set(0, 0, VALUE);
-		matrix1.set(0, 1, VALUE);
-		Matrix<Integer> matrix2 = new MatrixNotThreadSafe<Integer>(1, 2);
-		matrix2.set(0, 0, VALUE);
-		matrix2.set(0, 1, VALUE);
+		Matrix<Integer> matrix1 = new ArrayMatrix<Integer>(1, 2);
+		matrix1.set(new Position(0, 0), VALUE);
+		matrix1.set(new Position(0, 1), VALUE);
+		Matrix<Integer> matrix2 = new ArrayMatrix<Integer>(1, 2);
+		matrix2.set(new Position(0, 0), VALUE);
+		matrix2.set(new Position(0, 1), VALUE);
 		assertTrue(matrix1.equals(matrix2));
-		matrix2.set(0, 0, VALUE + 1);
+		matrix2.set(new Position(0, 0), VALUE + 1);
 		assertFalse(matrix1.equals(matrix2));
 	}
 
@@ -250,36 +231,36 @@ public class TestMatrixNotThreadSafe {
 
 	@Test
 	public void testEquals_NullElements_DifferentTemplateParameters() {
-		Matrix<Integer> integerMatrix = new MatrixNotThreadSafe<Integer>(2, 2);
-		Matrix<Boolean> booleanMatrix = new MatrixNotThreadSafe<Boolean>(2, 2);
+		Matrix<Integer> integerMatrix = new ArrayMatrix<Integer>(2, 2);
+		Matrix<Boolean> booleanMatrix = new ArrayMatrix<Boolean>(2, 2);
 		assertTrue(integerMatrix.equals(booleanMatrix));
 	}
 
 	@Test
 	public void testEquals_NotNullElements_DifferentTemplateParameters() {
-		Matrix<Integer> integerMatrix = new MatrixNotThreadSafe<Integer>(1, 1);
-		Matrix<Boolean> booleanMatrix = new MatrixNotThreadSafe<Boolean>(1, 1);
-		integerMatrix.set(0, 0, Integer.valueOf(0));
-		booleanMatrix.set(0, 0, Boolean.valueOf(false));
+		Matrix<Integer> integerMatrix = new ArrayMatrix<Integer>(1, 1);
+		Matrix<Boolean> booleanMatrix = new ArrayMatrix<Boolean>(1, 1);
+		integerMatrix.set(new Position(0, 0), Integer.valueOf(0));
+		booleanMatrix.set(new Position(0, 0), Boolean.valueOf(false));
 		assertFalse(integerMatrix.equals(booleanMatrix));
 	}
 
 	@Test
 	public void testEquals_NullElements_SameTemplateParameters() {
-		assertEquals(matrix, new MatrixNotThreadSafe<Integer>(ROWS, COLUMNS));
+		assertEquals(matrix, new ArrayMatrix<Integer>(DIM));
 	}
 
 	@Test
 	public void testEquals_DifferentDimensions_NullElements() {
-		Matrix<Integer> matrix1 = new MatrixNotThreadSafe<Integer>(2, 2);
-		Matrix<Integer> matrix2 = new MatrixNotThreadSafe<Integer>(2, 1);
+		Matrix<Integer> matrix1 = new ArrayMatrix<Integer>(2, 2);
+		Matrix<Integer> matrix2 = new ArrayMatrix<Integer>(2, 1);
 		assertFalse(matrix1.equals(matrix2));
 	}
 
 	@Test
 	public void testEquals_NotNullElements_With_NullElements() {		
-		Matrix<Boolean> falseElements = getMatrixInitializedByFalse(ROWS, COLUMNS);
-		Matrix<Boolean> nullElements = new MatrixNotThreadSafe<Boolean>(ROWS, COLUMNS);
+		Matrix<Boolean> falseElements = getMatrixInitializedByFalse(DIM);
+		Matrix<Boolean> nullElements = new ArrayMatrix<Boolean>(DIM);
 		assertFalse(falseElements.equals(nullElements));
 	}
 

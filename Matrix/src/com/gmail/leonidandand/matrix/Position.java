@@ -1,6 +1,6 @@
 package com.gmail.leonidandand.matrix;
 
-public class Position {
+public final class Position {
 	public final int row;
 	public final int column;
 
@@ -14,10 +14,18 @@ public class Position {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
 		if ((obj == null) || !(obj instanceof Position)) {
 			return false;
 		}
 		Position other = (Position) obj;
 		return (this.row == other.row) && (this.column == other.column);
+	}
+
+	@Override
+	public int hashCode() {
+		return row * column + row - column;
 	}
 }

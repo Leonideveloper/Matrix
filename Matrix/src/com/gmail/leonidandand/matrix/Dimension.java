@@ -1,6 +1,6 @@
 package com.gmail.leonidandand.matrix;
 
-public class Dimension {
+public final class Dimension {
 	public final int rows;
 	public final int columns;
 
@@ -15,15 +15,18 @@ public class Dimension {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Dimension) {
-			Dimension other = (Dimension) obj;
-			return rows == other.rows && columns == other.columns;
+		if (this == obj) {
+			return true;
 		}
-		return false;
+		if ((obj == null) || !(obj instanceof Dimension)) {
+			return false;
+		}
+		Dimension other = (Dimension) obj;
+		return (rows == other.rows) && (columns == other.columns);
 	}
 
 	@Override
 	public int hashCode() {
-		return rows * columns;
+		return rows * columns + rows - columns;
 	}
 }
