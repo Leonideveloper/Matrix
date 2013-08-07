@@ -68,10 +68,24 @@ public class TestArrayMatrix {
 	}
 
 	@Test
-	public void testContains() {
+	public void testEmptyMatrixNotContainsNotNullElement() {
 		assertFalse(matrix.contains(2));
+	}
+
+	@Test
+	public void testEmptyMatrixContainsNull() {
+		assertTrue(matrix.contains(null));
+	}
+
+	@Test
+	public void testContainsSettedElement() {
 		matrix.set(new Position(0, 0), 2);
 		assertTrue(matrix.contains(2));
+	}
+
+	@Test
+	public void testNotContainsOldValue() {
+		matrix.set(new Position(0, 0), 2);
 		matrix.set(new Position(0, 0), 1);
 		assertFalse(matrix.contains(2));
 	}
@@ -110,12 +124,11 @@ public class TestArrayMatrix {
 
 	@Test
 	public void testFill() {
-		final Integer one = 1;
-		matrix.fill(one);
+		final Integer ONE = 1;
+		matrix.fill(ONE);
 		for (int row = 0; row < DIM.rows; ++row) {
 			for (int column = 0; column < DIM.columns; ++column) {
-				Integer elem = matrix.get(new Position(row, column));
-				assertTrue(one.equals(elem));
+				assertEquals(ONE, matrix.get(new Position(row, column)));
 			}
 		}
 	}
@@ -194,13 +207,13 @@ public class TestArrayMatrix {
 	}
 
 	private void assertPreviousElementWasProcessed(Matrix<Boolean> matrix, Position pos) {
-		Position positionBefore = positionBefore(matrix.getDimension().rows, matrix.getDimension().columns, pos);
-		assertTrue(matrix.get(positionBefore));
+		Position previousPosition = previousPosition(pos, matrix.getDimension());
+		assertTrue(matrix.get(previousPosition));
 	}
-
-	private Position positionBefore(int rows, int columns, Position pos) {
+	
+	private Position previousPosition(Position pos, Dimension dim) {
 		if (pos.column - 1 < 0) {
-			return new Position(pos.row - 1, columns - 1);
+			return new Position(pos.row - 1, dim.columns - 1);
 		} else {
 			return new Position(pos.row, pos.column - 1);
 		}
