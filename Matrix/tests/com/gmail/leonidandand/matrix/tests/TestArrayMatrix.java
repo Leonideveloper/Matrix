@@ -21,7 +21,7 @@ import com.gmail.leonidandand.matrix.Position;
 import com.gmail.leonidandand.matrix.ReadOnlyMatrix;
 
 public class TestArrayMatrix {
-	private static final Dimension DIM = new Dimension(10, 18);
+	private static final Dimension DIM = Dimension.withRowsColumns(10, 18);
 	private static final int numberOfElements = DIM.rows * DIM.columns;
 	
 	private Matrix<Integer> matrix;
@@ -39,11 +39,11 @@ public class TestArrayMatrix {
 	@Test
 	public void testMatrixCopyConstructor() {
 		fillMatrix(matrix);
-		Matrix<Integer> copy = new ArrayMatrix<Integer>(matrix);
+		Matrix<Integer> copy = ArrayMatrix.copyOf(matrix);
 		assertEquals(matrix.getDimension(), copy.getDimension());
 		for (int row = 0; row < DIM.rows; ++row) {
 			for (int column = 0; column < DIM.columns; ++column) {
-				Position pos = new Position(row, column);
+				Position pos = Position.withRowColumn(row, column);
 				assertEquals(matrix.get(pos), copy.get(pos));
 			}
 		}
@@ -53,7 +53,7 @@ public class TestArrayMatrix {
 		final Dimension dim = matrixToFill.getDimension();
 		for (int row = 0; row < dim.rows; ++row) {
 			for (int column = 0; column < dim.columns; ++column) {
-				Position pos = new Position(row, column);
+				Position pos = Position.withRowColumn(row, column);
 				matrixToFill.set(pos, elementForPosition(pos));
 			}
 		}
@@ -65,17 +65,17 @@ public class TestArrayMatrix {
 
 	@Test
 	public void testInitValueIsNull() {
-		assertNull(matrix.get(new Position(0, 0)));
+		assertNull(matrix.get(Position.withRowColumn(0, 0)));
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testConstructorNegativeDimension() {
-		new ArrayMatrix<Integer>(1, -1);
+		new ArrayMatrix<Integer>(Dimension.withRowsColumns(1, -1));
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testConstructorDimensionIsZero() {
-		new ArrayMatrix<Integer>(0, 1);
+		new ArrayMatrix<Integer>(Dimension.withRowsColumns(0, 1));
 	}
 
 	@Test
@@ -90,14 +90,14 @@ public class TestArrayMatrix {
 
 	@Test
 	public void testContainsSettedElement() {
-		matrix.set(new Position(0, 0), 2);
+		matrix.set(Position.withRowColumn(0, 0), 2);
 		assertTrue(matrix.contains(2));
 	}
 
 	@Test
 	public void testNotContainsOldValue() {
-		matrix.set(new Position(0, 0), 2);
-		matrix.set(new Position(0, 0), 1);
+		matrix.set(Position.withRowColumn(0, 0), 2);
+		matrix.set(Position.withRowColumn(0, 0), 1);
 		assertFalse(matrix.contains(2));
 	}
 
@@ -150,8 +150,8 @@ public class TestArrayMatrix {
 			Integer.valueOf(1),
 			Integer.valueOf(2)
 		};
-		matrix.set(new Position(0, 0), elements[0]);
-		matrix.set(new Position(0, 1), elements[1]);
+		matrix.set(Position.withRowColumn(0, 0), elements[0]);
+		matrix.set(Position.withRowColumn(0, 1), elements[1]);
 		assertFalse(matrix.containsAll(Arrays.asList(elements)));
 	}
 	
@@ -172,8 +172,8 @@ public class TestArrayMatrix {
 	@Test
 	public void testCount() {
 		Integer one = Integer.valueOf(1);
-		matrix.set(new Position(0, 0), one);
-		matrix.set(new Position(0, 1), one);
+		matrix.set(Position.withRowColumn(0, 0), one);
+		matrix.set(Position.withRowColumn(0, 1), one);
 		assertEquals(2, matrix.count(one));
 	}
 
@@ -185,12 +185,12 @@ public class TestArrayMatrix {
 
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void testGetByOutOfBoundsPosition() {
-		matrix.get(new Position(DIM.rows + 1, 0));
+		matrix.get(Position.withRowColumn(DIM.rows + 1, 0));
 	}
 
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void testSetByOutOfBoundsPosition() {
-		matrix.set(new Position(0, DIM.columns + 1), Integer.valueOf(1));
+		matrix.set(Position.withRowColumn(0, DIM.columns + 1), Integer.valueOf(1));
 	}
 
 	@Test
@@ -198,7 +198,7 @@ public class TestArrayMatrix {
 		fillMatrix(matrix);
 		for (int row = 0; row < DIM.rows; ++row) {
 			for (int column = 0; column < DIM.columns; ++column) {
-				Position pos = new Position(row, column);
+				Position pos = Position.withRowColumn(row, column);
 				assertEquals(elementForPosition(pos), matrix.get(pos));
 			}
 		}
@@ -210,7 +210,7 @@ public class TestArrayMatrix {
 		matrix.fill(ONE);
 		for (int row = 0; row < DIM.rows; ++row) {
 			for (int column = 0; column < DIM.columns; ++column) {
-				assertEquals(ONE, matrix.get(new Position(row, column)));
+				assertEquals(ONE, matrix.get(Position.withRowColumn(row, column)));
 			}
 		}
 	}
@@ -220,16 +220,16 @@ public class TestArrayMatrix {
 		matrix.fill(null);
 		for (int row = 0; row < DIM.rows; ++row) {
 			for (int column = 0; column < DIM.columns; ++column) {
-				assertNull(matrix.get(new Position(row, column)));
+				assertNull(matrix.get(Position.withRowColumn(row, column)));
 			}
 		}
 	}
 	
 	@Test
 	public void testSwap() {
-		Matrix<Integer> matrix = new ArrayMatrix<Integer>(2, 2);
-		Position pos1 = new Position(0, 0);
-		Position pos2 = new Position(1, 1);
+		Matrix<Integer> matrix = new ArrayMatrix<Integer>(Dimension.withRowsColumns(2, 2));
+		Position pos1 = Position.withRowColumn(0, 0);
+		Position pos2 = Position.withRowColumn(1, 1);
 		Integer val1 = 1;
 		Integer val2 = 2;
 		matrix.set(pos1, val2);
@@ -241,8 +241,8 @@ public class TestArrayMatrix {
 
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void testSwapPositionOutOfBounds() {
-		Position pos1 = new Position(0, DIM.columns + 1);
-		Position pos2 = new Position(0, 0);
+		Position pos1 = Position.withRowColumn(0, DIM.columns + 1);
+		Position pos2 = Position.withRowColumn(0, 0);
 		matrix.swap(pos1, pos2);
 	}
 
@@ -259,7 +259,7 @@ public class TestArrayMatrix {
 		});
 		for (int row = 0; row < DIM.rows; ++row) {
 			for (int column = 0; column < DIM.columns; ++column) {
-				assertTrue(flags.get(new Position(row, column)));
+				assertTrue(flags.get(Position.withRowColumn(row, column)));
 			}
 		}
 	}
@@ -268,7 +268,7 @@ public class TestArrayMatrix {
 		final Matrix<Boolean> flags = new ArrayMatrix<Boolean>(dim);
 		for (int row = 0; row < dim.rows; ++row) {
 			for (int column = 0; column < dim.columns; ++column) {
-				flags.set(new Position(row, column), false);
+				flags.set(Position.withRowColumn(row, column), false);
 			}
 		}
 		return flags;
@@ -280,7 +280,7 @@ public class TestArrayMatrix {
 		flags.forEach(new OnEachHandler<Boolean>() {
 			@Override
 			public void handle(Position pos, Boolean elem) {
-				if (!pos.equals(new Position(0, 0))) {
+				if (!pos.equals(Position.withRowColumn(0, 0))) {
 					assertPreviousElementWasProcessed(flags, pos);
 				}
 				flags.set(pos, true);
@@ -295,23 +295,23 @@ public class TestArrayMatrix {
 	
 	private Position previousPosition(Position pos, Dimension dim) {
 		if (pos.column - 1 < 0) {
-			return new Position(pos.row - 1, dim.columns - 1);
+			return Position.withRowColumn(pos.row - 1, dim.columns - 1);
 		} else {
-			return new Position(pos.row, pos.column - 1);
+			return Position.withRowColumn(pos.row, pos.column - 1);
 		}
 	}
 
 	@Test
 	public void testEquals() {
 		final Integer VALUE = Integer.valueOf(3);
-		Matrix<Integer> matrix1 = new ArrayMatrix<Integer>(1, 2);
-		matrix1.set(new Position(0, 0), VALUE);
-		matrix1.set(new Position(0, 1), VALUE);
-		Matrix<Integer> matrix2 = new ArrayMatrix<Integer>(1, 2);
-		matrix2.set(new Position(0, 0), VALUE);
-		matrix2.set(new Position(0, 1), VALUE);
+		Matrix<Integer> matrix1 = new ArrayMatrix<Integer>(Dimension.withRowsColumns(1, 2));
+		matrix1.set(Position.withRowColumn(0, 0), VALUE);
+		matrix1.set(Position.withRowColumn(0, 1), VALUE);
+		Matrix<Integer> matrix2 = new ArrayMatrix<Integer>(matrix1.getDimension());
+		matrix2.set(Position.withRowColumn(0, 0), VALUE);
+		matrix2.set(Position.withRowColumn(0, 1), VALUE);
 		assertTrue(matrix1.equals(matrix2));
-		matrix2.set(new Position(0, 0), VALUE + 1);
+		matrix2.set(Position.withRowColumn(0, 0), VALUE + 1);
 		assertFalse(matrix1.equals(matrix2));
 	}
 
@@ -327,17 +327,19 @@ public class TestArrayMatrix {
 
 	@Test
 	public void testEquals_NullElements_DifferentTemplateParameters() {
-		Matrix<Integer> integerMatrix = new ArrayMatrix<Integer>(2, 2);
-		Matrix<Boolean> booleanMatrix = new ArrayMatrix<Boolean>(2, 2);
+		Dimension dim = Dimension.withRowsColumns(2, 2);
+		Matrix<Integer> integerMatrix = new ArrayMatrix<Integer>(dim);
+		Matrix<Boolean> booleanMatrix = new ArrayMatrix<Boolean>(dim);
 		assertTrue(integerMatrix.equals(booleanMatrix));
 	}
 
 	@Test
 	public void testEquals_NotNullElements_DifferentTemplateParameters() {
-		Matrix<Integer> integerMatrix = new ArrayMatrix<Integer>(1, 1);
-		Matrix<Boolean> booleanMatrix = new ArrayMatrix<Boolean>(1, 1);
-		integerMatrix.set(new Position(0, 0), Integer.valueOf(0));
-		booleanMatrix.set(new Position(0, 0), Boolean.valueOf(false));
+		Dimension dim = Dimension.withRowsColumns(1, 1);
+		Matrix<Integer> integerMatrix = new ArrayMatrix<Integer>(dim);
+		Matrix<Boolean> booleanMatrix = new ArrayMatrix<Boolean>(dim);
+		integerMatrix.set(Position.withRowColumn(0, 0), Integer.valueOf(0));
+		booleanMatrix.set(Position.withRowColumn(0, 0), Boolean.valueOf(false));
 		assertFalse(integerMatrix.equals(booleanMatrix));
 	}
 
@@ -348,8 +350,8 @@ public class TestArrayMatrix {
 
 	@Test
 	public void testEquals_DifferentDimensions_NullElements() {
-		Matrix<Integer> matrix1 = new ArrayMatrix<Integer>(2, 2);
-		Matrix<Integer> matrix2 = new ArrayMatrix<Integer>(2, 1);
+		Matrix<Integer> matrix1 = new ArrayMatrix<Integer>(Dimension.withRowsColumns(2, 2));
+		Matrix<Integer> matrix2 = new ArrayMatrix<Integer>(Dimension.withRowsColumns(2, 1));
 		assertFalse(matrix1.equals(matrix2));
 	}
 

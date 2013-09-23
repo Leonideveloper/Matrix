@@ -8,19 +8,13 @@ public class ArrayMatrix<T> implements Matrix<T> {
 	private final Dimension dim;
 	private final int numberOfElements;
 	private final T[] values;
-	
-	public ArrayMatrix(int rows, int columns) {
-		this(new Dimension(rows, columns));
-	}
 
-	@SuppressWarnings("unchecked")
-	public ArrayMatrix(Dimension dim) {
-		this.dim = dim;
-		this.numberOfElements = dim.rows * dim.columns;
-		this.values = (T[]) new Object[numberOfElements];
+	
+	public static <ElemType> ArrayMatrix<ElemType> copyOf(Matrix<ElemType> other) {
+		return new ArrayMatrix<ElemType>(other);
 	}
 	
-	public ArrayMatrix(Matrix<T> other) {
+	private ArrayMatrix(Matrix<T> other) {
 		this(other.getDimension());
 		other.forEach(new OnEachHandler<T>() {
 			@Override
@@ -28,6 +22,13 @@ public class ArrayMatrix<T> implements Matrix<T> {
 				set(pos, elem);
 			}
 		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ArrayMatrix(Dimension dim) {
+		this.dim = dim;
+		this.numberOfElements = dim.rows * dim.columns;
+		this.values = (T[]) new Object[numberOfElements];
 	}
 
 	@Override
@@ -128,7 +129,7 @@ public class ArrayMatrix<T> implements Matrix<T> {
 	private Position positionByIndex(int index) {
 		int row = index / dim.columns;
 		int column = index % dim.columns;
-		return new Position(row, column);
+		return Position.withRowColumn(row, column);
 	}
 
 	@Override

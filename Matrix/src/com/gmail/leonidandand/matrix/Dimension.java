@@ -4,7 +4,11 @@ public final class Dimension {
 	public final int rows;
 	public final int columns;
 
-	public Dimension(int rows, int columns) {
+	public static Dimension withRowsColumns(int rows, int columns) {
+		return new Dimension(rows, columns);
+	}
+	
+	private Dimension(int rows, int columns) {
 		if (rows <= 0 || columns <= 0) {
 			throw new IllegalArgumentException(
 					"Dimension constructor: rows and columns must be positive");

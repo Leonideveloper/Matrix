@@ -13,14 +13,18 @@ import com.gmail.leonidandand.matrix.OnEachHandler;
 import com.gmail.leonidandand.matrix.Position;
 
 public class TestIterableArrayMatrix {
-	
-	private static final Dimension DIM = new Dimension(4, 5);
+	private static final Dimension DIM = Dimension.withRowsColumns(4, 5);
 	private static final int NUMBER_OF_ELEMENTS = DIM.rows * DIM.columns;
 	private Matrix<Integer> matrix;
 	
 	@Before
 	public void setUp() {
 		matrix = new ArrayMatrix<Integer>(DIM);
+	}
+
+	@Test
+	public void testMatrixIsInstanceOfIterable() {
+		assertTrue(matrix instanceof Iterable<?>);
 	}
 
 	@Test

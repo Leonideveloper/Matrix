@@ -4,7 +4,11 @@ public final class Position {
 	public final int row;
 	public final int column;
 
-	public Position(int row, int column) {
+	public static Position withRowColumn(int row, int column) {
+		return new Position(row, column);
+	}
+	
+	private Position(int row, int column) {
 		if (row < 0 || column < 0) {
 			throw new IllegalArgumentException();
 		}

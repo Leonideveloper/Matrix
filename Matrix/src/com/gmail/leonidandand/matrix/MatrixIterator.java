@@ -16,7 +16,7 @@ class MatrixIterator<T> implements Iterator<T> {
 	private MatrixIterator(Matrix<T> matrix) {
 		this.matrix = matrix;
 		this.dimension = matrix.getDimension();
-		this.nextPosition = new Position(0, 0);
+		this.nextPosition = Position.withRowColumn(0, 0);
 	}
 
 	@Override
@@ -42,9 +42,9 @@ class MatrixIterator<T> implements Iterator<T> {
 
 	private Position nextPosition() {
 		if (nextPosition.column + 1 < dimension.columns) {
-			return new Position(nextPosition.row, nextPosition.column + 1);
+			return Position.withRowColumn(nextPosition.row, nextPosition.column + 1);
 		} else {
-			return new Position(nextPosition.row + 1, 0);
+			return Position.withRowColumn(nextPosition.row + 1, 0);
 		}
 	}
 

@@ -12,59 +12,63 @@ public class TestPosition {
 
 	@Test
 	public void testCreation() {
-		Position pos = new Position(1, 2);
+		Position pos = Position.withRowColumn(1, 2);
 		assertEquals(1, pos.row);
 		assertEquals(2, pos.column);
 	}
 
 	@Test
 	public void testRowsIsZero() {
-		new Position(0, 2);
+		Position.withRowColumn(0, 2);
 	}
 
 	@Test
 	public void testColumnsZero() {
-		new Position(2, 0);
+		Position.withRowColumn(2, 0);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
-	public void testIllegalRows() {
-		new Position(-1, 2);
+	public void testNegativeRows() {
+		Position.withRowColumn(-1, 2);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
-	public void testIllegalColumns() {
-		new Position(1, -2);
+	public void testNegativeColumns() {
+		Position.withRowColumn(1, -2);
 	}
 	
 	@Test
 	public void testEqualsIdentityTrue() {
-	    Position position = new Position(1, 2);
+	    Position position = Position.withRowColumn(1, 2);
 	    assertTrue(position.equals(position));
 	}
 
 	@Test
 	public void testValueEqualsTrue() {
-	    assertTrue(new Position(1, 2).equals(new Position(1, 2)));
+	    assertTrue(Position.withRowColumn(1, 2).equals(
+	    		   Position.withRowColumn(1, 2))
+	    );
 	}
 
 	@Test
 	public void testValueEqualsFalseIfColumnDiffers() {
-	    assertFalse(new Position(1, 2).equals(new Position(1, 3)));
+	    assertFalse(Position.withRowColumn(1, 2).equals(Position.withRowColumn(1, 3)));
 	}
 
 	@Test
 	public void testValueEqualsFalseIfRowDiffers() {
-	    assertFalse(new Position(1, 2).equals(new Position(3, 2)));
+	    assertFalse(Position.withRowColumn(1, 2).equals(
+	    			Position.withRowColumn(3, 2))
+	    );
 	}
 	
 	@Test
 	public void testEqualsFalseForNull() {
-	    assertFalse(new Position(1, 2).equals(null));
+	    assertFalse(Position.withRowColumn(1, 2).equals(null));
 	}
 
 	@Test
 	public void testHashCode_NotThrowsExceptions() {
-		new Position(1, 2).hashCode();
+		Position.withRowColumn(1, 2).hashCode();
 	}
 }
