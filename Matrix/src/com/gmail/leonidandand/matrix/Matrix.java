@@ -3,6 +3,7 @@ package com.gmail.leonidandand.matrix;
 public interface Matrix<T> {
     Dimension getDimension();
     boolean contains(T elem);
+	int count(T elem);
 	void fill(T value);
 	void forEach(OnEachHandler<T> onEachHandler);
 	T get(Position pos);

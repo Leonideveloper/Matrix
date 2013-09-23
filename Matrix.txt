@@ -1,0 +1,19 @@
+Добавить:
+	+ count();
+	- containsAll();
+
+Реализовать интерфейсы:
+	- Iterable;
+	- Serializable;
+	- Parcelable;
+
+
+- new structure:
+
+interface ReadOnlyMatrix
+                   ,
+                 /_\
+                   |
+                   |
+
+interface Matrix

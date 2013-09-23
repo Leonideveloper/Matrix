@@ -15,14 +15,14 @@ import com.gmail.leonidandand.matrix.OnEachHandler;
 import com.gmail.leonidandand.matrix.Position;
 
 public class TestArrayMatrix {
-	private static final Integer VALUE = 5;
 	private static final Dimension DIM = new Dimension(10, 18);
+	private static final int numberOfElements = DIM.rows * DIM.columns;
 	
 	private Matrix<Integer> matrix;
 
 	@Before
 	public void setUp() {
-		this.matrix = new ArrayMatrix<Integer>(DIM);
+		matrix = new ArrayMatrix<Integer>(DIM);
 	}
 	
 	@Test
@@ -94,6 +94,27 @@ public class TestArrayMatrix {
 	public void testJustCreatedMatrixContainsNull() {
 		assertTrue(matrix.contains(null));
 	}
+	
+	@Test
+	public void testCountAtJustCreatedMatrix() {
+		assertEquals(numberOfElements, matrix.count(null));
+		assertEquals(0, matrix.count(Integer.valueOf(1)));
+	}
+	
+	@Test
+	public void testCountAtMatrixFilledWithSingleValue() {
+		Integer two = Integer.valueOf(2);
+		matrix.fill(two);
+		assertEquals(numberOfElements, matrix.count(two));
+	}
+	
+	@Test
+	public void testCount() {
+		Integer one = Integer.valueOf(1);
+		matrix.set(new Position(0, 0), one);
+		matrix.set(new Position(0, 1), one);
+		assertEquals(2, matrix.count(one));
+	}
 
 	@Test
 	public void testGetDimension() {
@@ -108,7 +129,7 @@ public class TestArrayMatrix {
 
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void testSetByOutOfBoundsPosition() {
-		matrix.set(new Position(0, DIM.columns + 1), VALUE);
+		matrix.set(new Position(0, DIM.columns + 1), Integer.valueOf(1));
 	}
 
 	@Test
@@ -221,6 +242,7 @@ public class TestArrayMatrix {
 
 	@Test
 	public void testEquals() {
+		final Integer VALUE = Integer.valueOf(3);
 		Matrix<Integer> matrix1 = new ArrayMatrix<Integer>(1, 2);
 		matrix1.set(new Position(0, 0), VALUE);
 		matrix1.set(new Position(0, 1), VALUE);

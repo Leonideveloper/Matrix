@@ -37,11 +37,25 @@ public class ArrayMatrix<T> implements Matrix<T> {
 		return false;
     }
 
-    private boolean elementsAreEqual(Object e1, Object e2) {
+    private static boolean elementsAreEqual(Object e1, Object e2) {
         return (e1 == e2) ||
                ((e1 != null) && (e1.equals(e2))) ||
                ((e2 != null) && (e2.equals(e1)));
     }
+
+	@Override
+	public int count(final T toCalculateCount) {
+		final Counter counter = new Counter();
+		forEach(new OnEachHandler<T>() {
+			@Override
+			public void handle(Position pos, T elem) {
+				if (elementsAreEqual(elem, toCalculateCount)) {
+					counter.increaseByOne();
+				}
+			}
+		});
+		return counter.getCount();
+	}
 
 	@Override
 	public Dimension getDimension() {
