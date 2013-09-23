@@ -8,12 +8,12 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.gmail.leonidandand.matrix.ArrayMatrix;
-import com.gmail.leonidandand.matrix.Counter;
 import com.gmail.leonidandand.matrix.Dimension;
 import com.gmail.leonidandand.matrix.Matrix;
 import com.gmail.leonidandand.matrix.OnEachHandler;
@@ -126,17 +126,21 @@ public class TestArrayMatrix {
 
 	@Test
 	public void testContainsAllAddedElements() {
-		final Counter counter = new Counter();
 		final Collection<Integer> addedElements = new ArrayList<Integer>();
 		matrix.forEach(new OnEachHandler<Integer>() {
 			@Override
 			public void handle(Position pos, Integer elem) {
-				matrix.set(pos, counter.getCount());
-				addedElements.add(counter.getCount());
-				counter.increaseByOne();
+				int random = getRandom();
+				matrix.set(pos, random);
+				addedElements.add(random);
 			}
 		});
 		assertTrue(matrix.containsAll(addedElements));
+	}
+	
+	private int getRandom() {
+		Random random = new Random(System.nanoTime());
+		return random.nextInt();
 	}
 	
 	@Test
