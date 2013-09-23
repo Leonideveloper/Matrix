@@ -18,6 +18,7 @@ import com.gmail.leonidandand.matrix.Dimension;
 import com.gmail.leonidandand.matrix.Matrix;
 import com.gmail.leonidandand.matrix.OnEachHandler;
 import com.gmail.leonidandand.matrix.Position;
+import com.gmail.leonidandand.matrix.ReadOnlyMatrix;
 
 public class TestArrayMatrix {
 	private static final Dimension DIM = new Dimension(10, 18);
@@ -28,6 +29,11 @@ public class TestArrayMatrix {
 	@Before
 	public void setUp() {
 		matrix = new ArrayMatrix<Integer>(DIM);
+	}
+	
+	@Test
+	public void testMatrixIsInstanceOfReadOnlyMatrix() {
+		assertTrue(matrix instanceof ReadOnlyMatrix<?>);
 	}
 	
 	@Test

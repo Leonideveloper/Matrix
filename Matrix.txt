@@ -8,7 +8,7 @@
 	- Parcelable;
 
 
-- new structure:
++ new structure:
 
 interface ReadOnlyMatrix
                    ,
