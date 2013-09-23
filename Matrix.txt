@@ -3,7 +3,7 @@
 	+ containsAll();
 
 Реализовать интерфейсы:
-	- Iterable;
+	+ Iterable;
 	- Serializable;
 	- Parcelable;
 

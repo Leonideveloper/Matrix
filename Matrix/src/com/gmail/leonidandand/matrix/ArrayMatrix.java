@@ -1,5 +1,7 @@
 package com.gmail.leonidandand.matrix;
 
+import java.util.Iterator;
+
 
 
 public class ArrayMatrix<T> implements Matrix<T> {
@@ -169,5 +171,10 @@ public class ArrayMatrix<T> implements Matrix<T> {
 	private int hashCodeOfElementByIndex(int index) {
 		T element = values[index];
 		return element != null ? element.hashCode() : 0;
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return MatrixIterator.of(this);
 	}
 }

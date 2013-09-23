@@ -8,7 +8,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
 	TestPosition.class,
 	TestDimension.class,
-	TestArrayMatrix.class
+	TestArrayMatrix.class,
+	TestIterableArrayMatrix.class
 })
 public class AllTests {
 

@@ -28,4 +28,10 @@ public final class Position {
 	public int hashCode() {
 		return row * column + row - column;
 	}
+
+	@Override
+	public String toString() {
+		return "[" + row + ", " + column + "]";  
+	}
+	
 }

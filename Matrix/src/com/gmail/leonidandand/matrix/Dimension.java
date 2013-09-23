@@ -29,4 +29,10 @@ public final class Dimension {
 	public int hashCode() {
 		return rows * columns + rows - columns;
 	}
+
+	@Override
+	public String toString() {
+		return "{ rows: " + rows + ";  columns: " + columns + " }";  
+	}
+	
 }

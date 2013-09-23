@@ -1,6 +1,6 @@
 package com.gmail.leonidandand.matrix;
 
-public interface ReadOnlyMatrix<T> {
+public interface ReadOnlyMatrix<T> extends Iterable<T> {
     Dimension getDimension();
     boolean contains(T elem);
 	boolean containsAll(Iterable<T> elements);

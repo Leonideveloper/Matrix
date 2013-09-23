@@ -1,21 +1,25 @@
 package com.gmail.leonidandand.matrix;
 
-class Counter {
+public class Counter {
 	private int count;
 
-	Counter() {
+	public Counter() {
 		count = 0;
 	}
 	
-	Counter(int initCount) {
+	public Counter(int initCount) {
 		count = initCount;
 	}
 	
-	void increaseByOne() {
+	public void increaseByOne() {
 		count++;
 	}
 	
-	int getCount() {
+	public int getCount() {
 		return count;
+	}
+
+	public void reset(int initCount) {
+		count = initCount;
 	}
 }
