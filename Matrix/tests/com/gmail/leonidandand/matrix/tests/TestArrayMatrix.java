@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.gmail.leonidandand.matrix.ArrayMatrix;
+import com.gmail.leonidandand.matrix.Counter;
 import com.gmail.leonidandand.matrix.Dimension;
 import com.gmail.leonidandand.matrix.Matrix;
 import com.gmail.leonidandand.matrix.OnEachHandler;
@@ -50,17 +51,14 @@ public class TestArrayMatrix {
 	}
 	
 	private void fillMatrix(final Matrix<Integer> matrixToFill) {
+		Counter counter = new Counter();
 		final Dimension dim = matrixToFill.getDimension();
 		for (int row = 0; row < dim.rows; ++row) {
 			for (int column = 0; column < dim.columns; ++column) {
-				Position pos = Position.withRowColumn(row, column);
-				matrixToFill.set(pos, elementForPosition(pos));
+				matrixToFill.set(Position.withRowColumn(row, column), counter.getCount());
+				counter.increaseByOne();
 			}
 		}
-	}
-	
-	private Integer elementForPosition(Position pos) {
-		return pos.row * pos.column;
 	}
 
 	@Test
@@ -195,11 +193,19 @@ public class TestArrayMatrix {
 
 	@Test
 	public void testGetSet() {
-		fillMatrix(matrix);
+		Counter counter = new Counter(0);
 		for (int row = 0; row < DIM.rows; ++row) {
 			for (int column = 0; column < DIM.columns; ++column) {
-				Position pos = Position.withRowColumn(row, column);
-				assertEquals(elementForPosition(pos), matrix.get(pos));
+				matrix.set(new Position(row, column), counter.getCount());
+				counter.increaseByOne();
+			}
+		}
+		counter.reset(0);
+		for (int row = 0; row < DIM.rows; ++row) {
+			for (int column = 0; column < DIM.columns; ++column) {
+				Integer expected = counter.getCount();
+				counter.increaseByOne();
+				assertEquals(expected, matrix.get(new Position(row, column)));
 			}
 		}
 	}

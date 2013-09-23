@@ -8,7 +8,7 @@ public final class Dimension {
 		return new Dimension(rows, columns);
 	}
 	
-	private Dimension(int rows, int columns) {
+	public Dimension(int rows, int columns) {
 		if (rows <= 0 || columns <= 0) {
 			throw new IllegalArgumentException(
 					"Dimension constructor: rows and columns must be positive");

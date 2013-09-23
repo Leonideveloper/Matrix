@@ -38,8 +38,7 @@ public class TestIterableArrayMatrix {
 	
 	@Test
 	public void testIterable() {
-		final int INIT = 0;
-		final Counter counter = new Counter(INIT);
+		final Counter counter = new Counter(0);
 		matrix.forEach(new OnEachHandler<Integer>() {
 			@Override
 			public void handle(Position pos, Integer elem) {
@@ -47,7 +46,7 @@ public class TestIterableArrayMatrix {
 				counter.increaseByOne();
 			}
 		});
-		counter.reset(INIT);
+		counter.reset(0);
 		for (Integer elem : matrix) {
 			Integer expected = counter.getCount();
 			assertEquals(expected, elem);

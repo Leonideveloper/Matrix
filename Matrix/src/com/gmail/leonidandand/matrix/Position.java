@@ -8,7 +8,7 @@ public final class Position {
 		return new Position(row, column);
 	}
 	
-	private Position(int row, int column) {
+	public Position(int row, int column) {
 		if (row < 0 || column < 0) {
 			throw new IllegalArgumentException();
 		}
