@@ -1,6 +1,6 @@
 Добавить:
 	+ count();
-	- containsAll();
+	+ containsAll();
 
 Реализовать интерфейсы:
 	- Iterable;

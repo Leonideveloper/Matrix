@@ -5,12 +5,17 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import com.gmail.leonidandand.matrix.ArrayMatrix;
+import com.gmail.leonidandand.matrix.Counter;
 import com.gmail.leonidandand.matrix.Dimension;
 import com.gmail.leonidandand.matrix.Matrix;
-import com.gmail.leonidandand.matrix.ArrayMatrix;
 import com.gmail.leonidandand.matrix.OnEachHandler;
 import com.gmail.leonidandand.matrix.Position;
 
@@ -94,6 +99,51 @@ public class TestArrayMatrix {
 	public void testJustCreatedMatrixContainsNull() {
 		assertTrue(matrix.contains(null));
 	}
+
+	@Test
+	public void testContainsAll_JustCreatedMatrixContainsNulls() {
+		Iterable<Integer> iterable = Arrays.<Integer>asList(null, null);
+		assertTrue(matrix.containsAll(iterable));
+	}
+	
+	@Test
+	public void testContainsAll_JustCreatedMatrixDoesNotContainValuesThatDifferFromNull() {
+		Iterable<Integer> iterable = Arrays.<Integer>asList(1);
+		assertFalse(matrix.containsAll(iterable));
+	}
+
+	@Test
+	public void testContainsAll_AlwaysContainsEmptyIterable() {
+		Iterable<Integer> iterable = new ArrayList<Integer>();
+		assertTrue(matrix.containsAll(iterable));
+	}
+
+	@Test
+	public void testContainsAllAddedElements() {
+		final Counter counter = new Counter();
+		final Collection<Integer> addedElements = new ArrayList<Integer>();
+		matrix.forEach(new OnEachHandler<Integer>() {
+			@Override
+			public void handle(Position pos, Integer elem) {
+				matrix.set(pos, counter.getCount());
+				addedElements.add(counter.getCount());
+				counter.increaseByOne();
+			}
+		});
+		assertTrue(matrix.containsAll(addedElements));
+	}
+	
+	@Test
+	public void testContainsAll_MatrixDoesNotContainNotAddedElements() {
+		Integer[] elements = {
+			Integer.valueOf(0),
+			Integer.valueOf(1),
+			Integer.valueOf(2)
+		};
+		matrix.set(new Position(0, 0), elements[0]);
+		matrix.set(new Position(0, 1), elements[1]);
+		assertFalse(matrix.containsAll(Arrays.asList(elements)));
+	}
 	
 	@Test
 	public void testCountAtJustCreatedMatrix() {
@@ -106,6 +156,7 @@ public class TestArrayMatrix {
 		Integer two = Integer.valueOf(2);
 		matrix.fill(two);
 		assertEquals(numberOfElements, matrix.count(two));
+		assertEquals(0, matrix.count(Integer.valueOf(two + 1)));
 	}
 	
 	@Test

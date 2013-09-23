@@ -1,6 +1,7 @@
 package com.gmail.leonidandand.matrix;
 
 
+
 public class ArrayMatrix<T> implements Matrix<T> {
 	private final Dimension dim;
 	private final int numberOfElements;
@@ -44,8 +45,18 @@ public class ArrayMatrix<T> implements Matrix<T> {
     }
 
 	@Override
+    public boolean containsAll(Iterable<T> elements) {
+		for (T each : elements) {
+			if (!contains(each)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
 	public int count(final T toCalculateCount) {
-		final Counter counter = new Counter();
+		final Counter counter = new Counter(0);
 		forEach(new OnEachHandler<T>() {
 			@Override
 			public void handle(Position pos, T elem) {
