@@ -1,10 +1,10 @@
-package com.gmail.leonidandand.matrix.tests;
+package com.gmail.landanurm.matrix.tests;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.gmail.leonidandand.matrix.Dimension;
+import com.gmail.landanurm.matrix.Dimension;
 
 public class TestDimension {
 	

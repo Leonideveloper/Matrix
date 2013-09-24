@@ -1,4 +1,4 @@
-package com.gmail.leonidandand.matrix.tests;
+package com.gmail.landanurm.matrix.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.gmail.leonidandand.matrix.Position;
+import com.gmail.landanurm.matrix.Position;
 
 public class TestPosition {
 

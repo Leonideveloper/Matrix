@@ -1,6 +1,10 @@
-package com.gmail.leonidandand.matrix;
+package com.gmail.landanurm.matrix;
 
-public final class Position {
+import java.io.Serializable;
+
+public final class Position implements Serializable {
+	private static final long serialVersionUID = 3286630006743379302L;
+	
 	public final int row;
 	public final int column;
 

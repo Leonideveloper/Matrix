@@ -1,4 +1,4 @@
-package com.gmail.leonidandand.matrix;
+package com.gmail.landanurm.matrix;
 
 public interface ReadOnlyMatrix<T> extends Iterable<T> {
     Dimension getDimension();

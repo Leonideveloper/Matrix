@@ -1,6 +1,10 @@
-package com.gmail.leonidandand.matrix;
+package com.gmail.landanurm.matrix;
 
-public final class Dimension {
+import java.io.Serializable;
+
+public final class Dimension implements Serializable {
+	private static final long serialVersionUID = -7894569433593762229L;
+	
 	public final int rows;
 	public final int columns;
 

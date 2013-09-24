@@ -1,16 +1,15 @@
-package com.gmail.leonidandand.matrix.tests;
+package com.gmail.landanurm.matrix.tests;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.gmail.leonidandand.matrix.ArrayMatrix;
-import com.gmail.leonidandand.matrix.Counter;
-import com.gmail.leonidandand.matrix.Dimension;
-import com.gmail.leonidandand.matrix.Matrix;
-import com.gmail.leonidandand.matrix.OnEachHandler;
-import com.gmail.leonidandand.matrix.Position;
+import com.gmail.landanurm.matrix.ArrayMatrix;
+import com.gmail.landanurm.matrix.Dimension;
+import com.gmail.landanurm.matrix.Matrix;
+import com.gmail.landanurm.matrix.OnEachHandler;
+import com.gmail.landanurm.matrix.Position;
 
 public class TestIterableArrayMatrix {
 	private static final Dimension DIM = Dimension.withRowsColumns(4, 5);

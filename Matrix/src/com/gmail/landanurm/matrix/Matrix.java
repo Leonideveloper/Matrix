@@ -1,4 +1,4 @@
-package com.gmail.leonidandand.matrix;
+package com.gmail.landanurm.matrix;
 
 public interface Matrix<T> extends ReadOnlyMatrix<T> {
 	void fill(T value);

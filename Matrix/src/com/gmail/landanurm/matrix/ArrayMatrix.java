@@ -1,10 +1,13 @@
-package com.gmail.leonidandand.matrix;
+package com.gmail.landanurm.matrix;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 
 
-public class ArrayMatrix<T> implements Matrix<T> {
+public class ArrayMatrix<T> implements Matrix<T>, Serializable {
+	private static final long serialVersionUID = 7040171121114560137L;
+	
 	private final Dimension dim;
 	private final int numberOfElements;
 	private final T[] values;
@@ -24,17 +27,21 @@ public class ArrayMatrix<T> implements Matrix<T> {
 		});
 	}
 	
-	@SuppressWarnings("unchecked")
 	public ArrayMatrix(Dimension dim) {
 		this.dim = dim;
 		this.numberOfElements = dim.rows * dim.columns;
-		this.values = (T[]) new Object[numberOfElements];
+		this.values = arrayByLength(numberOfElements);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <T> T[] arrayByLength(int length) {
+		return (T[]) new Object[length];
 	}
 
 	@Override
     public boolean contains(T elem) {
-		for (int i = 0; i < numberOfElements; ++i) {
-			if (elementsAreEqual(elem, values[i])) {
+		for (T each : values) {
+			if (elementsAreEqual(each, elem)) {
 				return true;
 			}
 		}
@@ -42,9 +49,9 @@ public class ArrayMatrix<T> implements Matrix<T> {
     }
 
     private static boolean elementsAreEqual(Object e1, Object e2) {
-        return (e1 == e2) ||
-               ((e1 != null) && (e1.equals(e2))) ||
-               ((e2 != null) && (e2.equals(e1)));
+    	return (e1 == null)
+    				? (e2 == null)
+    				: (e1.equals(e2));
     }
 
 	@Override
@@ -58,17 +65,14 @@ public class ArrayMatrix<T> implements Matrix<T> {
 	}
 
 	@Override
-	public int count(final T toCalculateCount) {
-		final Counter counter = new Counter(0);
-		forEach(new OnEachHandler<T>() {
-			@Override
-			public void handle(Position pos, T elem) {
-				if (elementsAreEqual(elem, toCalculateCount)) {
-					counter.increaseByOne();
-				}
+	public int count(T elem) {
+		int count = 0;
+		for (T each : values) {
+			if (elementsAreEqual(each, elem)) {
+				++count;
 			}
-		});
-		return counter.getCount();
+		}
+		return count;
 	}
 
 	@Override
@@ -110,13 +114,10 @@ public class ArrayMatrix<T> implements Matrix<T> {
 	}
 	
 	@Override
-	public void fill(final T value) {
-		forEach(new OnEachHandler<T>() {
-			@Override
-			public void handle(Position pos, T elem) {
-				set(pos, value);
-			}
-		});
+	public void fill(T value) {
+		for (int i = 0; i < numberOfElements; ++i) {
+			values[i] = value;
+		}
 	}
 
 	@Override
@@ -163,15 +164,10 @@ public class ArrayMatrix<T> implements Matrix<T> {
 	@Override
 	public int hashCode() {
 		int totalHashCode = 0;
-		for (int i = 0; i < numberOfElements; ++i) {
-			totalHashCode += hashCodeOfElementByIndex(i);
+		for (T each : values) {
+			totalHashCode += (each == null) ? 0 : each.hashCode();
 		}
 		return totalHashCode + dim.hashCode();
-	}
-	
-	private int hashCodeOfElementByIndex(int index) {
-		T element = values[index];
-		return element != null ? element.hashCode() : 0;
 	}
 
 	@Override

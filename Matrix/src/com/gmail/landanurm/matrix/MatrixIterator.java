@@ -1,4 +1,4 @@
-package com.gmail.leonidandand.matrix;
+package com.gmail.landanurm.matrix;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
